@@ -4,8 +4,10 @@ from deta import Deta
 import pandas as pd
 from collections import Counter
 import requests
+from limpieza import df_completo
 
-df_plataformas= pd.read_csv(r"C:\Users\mariana\Downloads\PI01-Data-Engineering-main\Dataset")
+
+df_plataformas= df_completo
 app = FastAPI(title="Proyecto Data Engineer")
 deta = Deta("906a13f2-8dd6-4ffa-b906-239cf92cde0a")  # configure your Deta project 
 drive = deta.Drive("images") # access to your drive
@@ -15,7 +17,7 @@ async def root(file: UploadFile=File(...)):
         return{"file_name": file.filename}
 
 #1. Cantidad de veces que aparece una keyword en el título de peliculas/series, por plataforma
-@app.get("/keyword_funcion/") 
+@app.get("/keyword_funcion/") #FUNCIONA
 def keyword_funcion(plataforma,keyword):
     cantidad_de_keyword=df_plataformas.loc[df_plataformas['title'].str.contains(keyword)]
     tabla_id = cantidad_de_keyword.groupby(['id']).size().reset_index(name='cantidad de id')
